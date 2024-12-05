@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  database-mysql:
+    container_name: studyCafe-database
+    image: mysql:latest
+
+    environment:
+      MYSQL_ROOT_PASSWORD: '1234'
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: 'studyCafe'
+      TZ: Asia/Seoul
+
+    volumes:
+      - ./mysql-init.d:/docker-entrypoint-initdb.d
+
+    ports:
+      - '3307:3306'
+
+    command:
+      - '--character-set-server=utf8mb4'
+      - '--collation-server=utf8mb4_unicode_ci'
