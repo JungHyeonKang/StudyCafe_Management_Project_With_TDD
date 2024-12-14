@@ -1,4 +1,4 @@
-package com.kang.studyCafe.api.domain;
+package com.kang.studyCafe.domain;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

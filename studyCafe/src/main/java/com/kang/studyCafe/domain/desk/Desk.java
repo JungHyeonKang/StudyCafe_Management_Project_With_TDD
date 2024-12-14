@@ -1,4 +1,4 @@
-package com.kang.studyCafe.api.domain.desk;
+package com.kang.studyCafe.domain.desk;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

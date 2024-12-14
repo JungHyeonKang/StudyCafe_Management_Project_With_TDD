@@ -1,4 +1,4 @@
-package com.kang.studyCafe.api.domain.desk;
+package com.kang.studyCafe.domain.desk;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

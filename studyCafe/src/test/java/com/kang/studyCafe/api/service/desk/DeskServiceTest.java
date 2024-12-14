@@ -1,23 +1,21 @@
 package com.kang.studyCafe.api.service.desk;
 
 import com.kang.studyCafe.api.IntegrationTestSupport;
-import com.kang.studyCafe.api.domain.desk.Desk;
-import com.kang.studyCafe.api.domain.desk.DeskRepository;
-import com.kang.studyCafe.api.domain.desk.DeskStatus;
-import com.kang.studyCafe.api.domain.desk.DeskType;
+import com.kang.studyCafe.domain.desk.Desk;
+import com.kang.studyCafe.domain.desk.DeskRepository;
+import com.kang.studyCafe.domain.desk.DeskStatus;
+import com.kang.studyCafe.domain.desk.DeskType;
 import com.kang.studyCafe.api.service.desk.response.DeskResponse;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static com.kang.studyCafe.api.domain.desk.DeskStatus.*;
-import static com.kang.studyCafe.api.domain.desk.DeskType.*;
+import static com.kang.studyCafe.domain.desk.DeskStatus.*;
+import static com.kang.studyCafe.domain.desk.DeskType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
-import static org.junit.jupiter.api.Assertions.*;
 
 class DeskServiceTest extends IntegrationTestSupport {
 
