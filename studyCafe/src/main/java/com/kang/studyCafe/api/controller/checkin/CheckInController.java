@@ -20,7 +20,7 @@ public class CheckInController {
 
     @PostMapping("/api/v1/checkIn/new")
     public ApiResponse<CheckInResponse> createCheckIn(@Validated @RequestBody CheckInCreateRequest checkInCreateRequest) {
-        return ApiResponse.ok(checkInService.createCheckIn(checkInCreateRequest,LocalDateTime.now()));
+        return ApiResponse.ok(checkInService.createCheckIn(checkInCreateRequest.toServiceRequest(),LocalDateTime.now()));
     }
 
 }

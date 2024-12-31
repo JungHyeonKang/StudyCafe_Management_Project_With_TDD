@@ -1,7 +1,9 @@
 package com.kang.studyCafe.api.service.checkin.response;
 
 import com.kang.studyCafe.api.service.desk.response.DeskResponse;
+import lombok.Getter;
 
+@Getter
 public class CheckInResponse {
     private Long id;
 
@@ -9,5 +11,5 @@ public class CheckInResponse {
 
     private String checkInTime;
 
-    private String checkOutTime;
+    private String expectedCheckOutTime;
 }

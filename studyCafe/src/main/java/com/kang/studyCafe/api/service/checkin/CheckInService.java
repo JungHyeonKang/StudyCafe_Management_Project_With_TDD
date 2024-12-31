@@ -1,6 +1,7 @@
 package com.kang.studyCafe.api.service.checkin;
 
 import com.kang.studyCafe.api.controller.checkin.request.CheckInCreateRequest;
+import com.kang.studyCafe.api.service.checkin.request.CheckInCreateServiceRequest;
 import com.kang.studyCafe.api.service.checkin.response.CheckInResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 public class CheckInService {
 
     @Transactional
-    public CheckInResponse createCheckIn(CheckInCreateRequest checkInCreateRequest, LocalDateTime now) {
+    public CheckInResponse createCheckIn(CheckInCreateServiceRequest request, LocalDateTime checkInTime) {
 
         /**
          * 1. desk가 이용가능한 desk 인지 조회 및 확인
