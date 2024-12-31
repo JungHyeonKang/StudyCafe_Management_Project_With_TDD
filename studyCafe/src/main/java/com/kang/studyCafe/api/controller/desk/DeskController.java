@@ -1,4 +1,4 @@
-package com.kang.studyCafe.api.controller;
+package com.kang.studyCafe.api.controller.desk;
 
 import com.kang.studyCafe.api.ApiResponse;
 import com.kang.studyCafe.api.service.desk.DeskService;
@@ -14,7 +14,7 @@ import java.util.List;
 public class DeskController {
     private final DeskService deskService;
 
-    @GetMapping("/api/vi/desks/display")
+    @GetMapping("/api/v1/desks/display")
     public ApiResponse<List<DeskResponse>> getAvailableDesks() {
         return ApiResponse.ok(deskService.getAvailableDeskList());
     }
