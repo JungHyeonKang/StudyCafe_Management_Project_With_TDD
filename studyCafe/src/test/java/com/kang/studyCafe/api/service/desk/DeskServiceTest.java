@@ -6,9 +6,11 @@ import com.kang.studyCafe.domain.desk.DeskRepository;
 import com.kang.studyCafe.domain.desk.DeskStatus;
 import com.kang.studyCafe.domain.desk.DeskType;
 import com.kang.studyCafe.api.service.desk.response.DeskResponse;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,12 +19,18 @@ import static com.kang.studyCafe.domain.desk.DeskType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
+@Transactional
 class DeskServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private DeskRepository deskRepository;
     @Autowired
     private DeskService deskService;
+
+//    @AfterEach
+//    void tearDown() {
+//        deskRepository.deleteAllInBatch();
+//    }
 
     @DisplayName("고객은 이용 가능한 Desk만 조회 가능하다.")
     @Test

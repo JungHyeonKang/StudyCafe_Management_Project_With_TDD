@@ -5,9 +5,11 @@ import com.kang.studyCafe.domain.desk.Desk;
 import com.kang.studyCafe.domain.desk.DeskRepository;
 import com.kang.studyCafe.domain.desk.DeskStatus;
 import com.kang.studyCafe.domain.desk.DeskType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,10 +18,16 @@ import static com.kang.studyCafe.domain.desk.DeskType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
+
 class DeskRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     private DeskRepository deskRepository;
+
+    @AfterEach
+    void tearDown() {
+        deskRepository.deleteAllInBatch();
+    }
 
     @DisplayName("예약가능한 자리를 조회한다.")
     @Test
