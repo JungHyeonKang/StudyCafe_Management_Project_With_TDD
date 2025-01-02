@@ -39,7 +39,7 @@ class DeskControllerTest extends ControllerTestSupport{
 
         //when /then
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/vi/desks/display")
+                MockMvcRequestBuilders.get("/api/v1/desks/display")
         )
         .andDo(MockMvcResultHandlers.print())
         .andExpect(MockMvcResultMatchers.status().isOk())

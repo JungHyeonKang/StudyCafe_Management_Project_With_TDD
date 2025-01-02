@@ -1,11 +1,10 @@
 package com.kang.studyCafe.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kang.studyCafe.api.controller.DeskController;
+import com.kang.studyCafe.api.controller.desk.DeskController;
 import com.kang.studyCafe.api.service.desk.DeskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;

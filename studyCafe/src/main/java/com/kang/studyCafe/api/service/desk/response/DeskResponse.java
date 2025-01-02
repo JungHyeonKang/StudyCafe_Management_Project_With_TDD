@@ -18,7 +18,7 @@ public class DeskResponse {
     private DeskType deskType;
 
     @Builder
-    public DeskResponse(int deskNumber, DeskStatus deskStatus, DeskType deskType) {
+    private DeskResponse(int deskNumber, DeskStatus deskStatus, DeskType deskType) {
         this.deskNumber = deskNumber;
         this.deskStatus = deskStatus;
         this.deskType = deskType;

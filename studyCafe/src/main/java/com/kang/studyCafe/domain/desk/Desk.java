@@ -28,4 +28,8 @@ public class Desk {
         this.deskStatus = deskStatus;
         this.deskType = deskType;
     }
+
+    public void updateDeskStatus(DeskStatus deskStatus) {
+        this.deskStatus = deskStatus;
+    }
 }
