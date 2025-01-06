@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
+@Getter
 public class CheckInCreateRequest {
 
     @NotNull(message = "회원 정보는 필수 값 입니다.")

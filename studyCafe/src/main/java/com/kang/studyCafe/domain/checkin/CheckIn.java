@@ -39,7 +39,7 @@ public class CheckIn extends BaseEntity {
     private LocalDateTime expectedCheckOutTime; // 체크아웃 예정 시간
 
     @Builder
-    public CheckIn(CheckInStatus checkInStatus, Desk desk, User user, LocalDateTime checkInTime) {
+    private CheckIn(CheckInStatus checkInStatus, Desk desk, User user, LocalDateTime checkInTime) {
         this.checkInStatus = checkInStatus;
         this.desk = desk;
         this.user = user;
