@@ -1,7 +1,9 @@
 package com.kang.studyCafe.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kang.studyCafe.api.controller.checkin.CheckInController;
 import com.kang.studyCafe.api.controller.desk.DeskController;
+import com.kang.studyCafe.api.service.checkin.CheckInService;
 import com.kang.studyCafe.api.service.desk.DeskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -9,7 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(controllers = DeskController.class)
+@WebMvcTest(controllers = {DeskController.class, CheckInController.class})
 @ActiveProfiles("test")
 public class ControllerTestSupport {
     @Autowired
@@ -22,4 +24,7 @@ public class ControllerTestSupport {
     // 해당 MockTest를 띄우기 위해 deskService MockitoBean 주입해주는 어노테이션
     @MockitoBean
     protected DeskService deskService;
+
+    @MockitoBean
+    protected CheckInService checkInService;
 }

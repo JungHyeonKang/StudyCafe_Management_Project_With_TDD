@@ -22,7 +22,7 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
-    @OneToOne
+    @ManyToOne
     private Ticket ticket;
 
     @Builder

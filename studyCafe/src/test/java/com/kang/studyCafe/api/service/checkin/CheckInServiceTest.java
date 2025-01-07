@@ -3,6 +3,8 @@ package com.kang.studyCafe.api.service.checkin;
 import com.kang.studyCafe.api.IntegrationTestSupport;
 import com.kang.studyCafe.api.service.checkin.request.CheckInCreateServiceRequest;
 import com.kang.studyCafe.api.service.checkin.response.CheckInResponse;
+import com.kang.studyCafe.domain.checkin.CheckIn;
+import com.kang.studyCafe.domain.checkin.CheckInRepository;
 import com.kang.studyCafe.domain.desk.Desk;
 import com.kang.studyCafe.domain.desk.DeskRepository;
 import com.kang.studyCafe.domain.desk.DeskStatus;
@@ -14,11 +16,18 @@ import com.kang.studyCafe.domain.ticket.TicketType;
 import com.kang.studyCafe.domain.user.User;
 import com.kang.studyCafe.domain.user.UserRepository;
 import com.kang.studyCafe.domain.user.UserStatus;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import static com.kang.studyCafe.domain.desk.DeskStatus.*;
 import static com.kang.studyCafe.domain.desk.DeskType.*;
 import static org.assertj.core.api.Assertions.*;
@@ -38,6 +47,9 @@ class CheckInServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private TicketRepository ticketRepository;
+
+    @Autowired
+    private CheckInRepository checkInRepository;
 
     private static final LocalDateTime checkInTime = LocalDateTime.now();
 
@@ -221,6 +233,72 @@ class CheckInServiceTest extends IntegrationTestSupport {
 
         //then
         assertThat(checkInResponse.getUserResponse().getUserStatus()).isEqualTo(UserStatus.CHECK_IN);
+
+    }
+
+    @DisplayName("동시에 같은 desk를 체크인 시, 먼저 접근한 회원이 체크인 되고 나머지 회원들은 IllegalException을 받는다")
+    @Test
+    @Disabled
+    public void checkInAtTheSameTime() throws Exception {
+        int threadCount = 2;
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        CountDownLatch countDownLatch = new CountDownLatch(threadCount);
+
+        //when
+        executorService.execute(()->{
+            //given
+            Desk desk = createDesk(1,LAPTOP, AVAILABLE);
+            Desk savedDesk = deskRepository.save(desk);
+
+            Ticket ticket = Ticket.createTicket(TicketStatus.AVAILABLE, TicketType.TIME_TICKET_50_HOURS);
+            Ticket savedTicket = ticketRepository.save(ticket);
+
+            User user = User.createUser("타노스", UserStatus.CHECK_OUT, savedTicket);
+            User user2 = User.createUser("성기훈", UserStatus.CHECK_OUT, savedTicket);
+            User user3 = User.createUser("오일영", UserStatus.CHECK_OUT, savedTicket);
+            List<User> users = userRepository.saveAll(List.of(user, user2, user3));
+
+            try {
+                CheckInCreateServiceRequest request = CheckInCreateServiceRequest.builder()
+                        .userId(1L)
+                        .deskId(savedDesk.getId())
+                        .build();
+                checkInService.createCheckIn(request, checkInTime);
+            } finally {
+                countDownLatch.countDown();
+            }
+
+        });
+
+//        executorService.execute(()->{
+//            //given
+//            Optional<Desk> desk = deskRepository.findById(1L);
+//            Ticket ticket = Ticket.createTicket(TicketStatus.AVAILABLE, TicketType.TIME_TICKET_50_HOURS);
+//            Ticket savedTicket = ticketRepository.save(ticket);
+//
+//            User user = User.createUser("타노스", UserStatus.CHECK_OUT, savedTicket);
+//            User user2 = User.createUser("성기훈", UserStatus.CHECK_OUT, savedTicket);
+//            User user3 = User.createUser("오일영", UserStatus.CHECK_OUT, savedTicket);
+//            List<User> users = userRepository.saveAll(List.of(user, user2, user3));
+//
+//            try {
+//                CheckInCreateServiceRequest request = CheckInCreateServiceRequest.builder()
+//                        .userId(2L)
+//                        .deskId(desk.get().getId())
+//                        .build();
+//                checkInService.createCheckIn(request, checkInTime);
+//            } finally {
+//                countDownLatch.countDown();
+//            }
+//
+//        });
+
+
+        countDownLatch.await();
+
+        //then
+        List<CheckIn> all = checkInRepository.findAll();
+        assertThat(all).hasSize(1);
 
     }
 
