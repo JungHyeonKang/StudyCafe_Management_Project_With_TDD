@@ -4,6 +4,7 @@ import com.kang.studyCafe.api.controller.checkin.request.CheckInCreateRequest;
 import com.kang.studyCafe.api.service.checkin.request.CheckInCreateServiceRequest;
 import com.kang.studyCafe.api.service.checkin.response.CheckInResponse;
 import com.kang.studyCafe.api.service.desk.response.DeskResponse;
+import com.kang.studyCafe.api.service.message.MessageService;
 import com.kang.studyCafe.api.service.user.response.UserResponse;
 import com.kang.studyCafe.domain.checkin.CheckIn;
 import com.kang.studyCafe.domain.checkin.CheckInRepository;
@@ -15,10 +16,12 @@ import com.kang.studyCafe.domain.ticket.TicketStatus;
 import com.kang.studyCafe.domain.user.User;
 import com.kang.studyCafe.domain.user.UserRepository;
 import com.kang.studyCafe.domain.user.UserStatus;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -33,9 +36,11 @@ public class CheckInService {
 
     private final CheckInRepository checkInRepository;
 
+    private final MessageService messageService;
+
     @Transactional
     public CheckInResponse createCheckIn(CheckInCreateServiceRequest request, LocalDateTime checkInTime) {
-
+        CheckIn savedCheckIn = null;
         // 이용가능한 desk 인지 조회 및 확인
         Desk desk = getValidatedDesk(request.getDeskId());
 
@@ -48,12 +53,19 @@ public class CheckInService {
             throw new RuntimeException("입실 등록을 실패 했습니다.");
         }
 
-        CheckIn savedCheckIn = checkInRepository.save(checkIn);
+        try {
+            savedCheckIn = checkInRepository.save(checkIn);
+        } catch (ConstraintViolationException e) {
+            throw new RuntimeException("입실 등록을 실패 했습니다.");
+        }
 
         // desk 상태 이용중으로 변경
         desk.updateDeskStatus(DeskStatus.IN_USE);
         // user 상태 체크인을 변경
         user.updateUserStatus(UserStatus.CHECK_IN);
+        String content = user.getUserName() + "님 " + desk.getDeskNumber() + "번 " +
+                "좌석에 입실하셨습니다";
+        messageService.sendMessage("KangStudyCafe", user.getUserContactNum(), content);
 
         return CheckInResponse.builder()
                 .id(savedCheckIn.getId())

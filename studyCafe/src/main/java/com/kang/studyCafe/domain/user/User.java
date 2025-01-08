@@ -19,6 +19,8 @@ public class User extends BaseEntity {
 
     private String userName;
 
+    private String userContactNum;
+
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
